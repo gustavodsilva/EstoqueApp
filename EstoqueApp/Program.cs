@@ -15,7 +15,21 @@ while (true)
     switch (opcao)
     {
         case "1":
-            // cadastrar
+            Console.WriteLine("NOME DO PRODUTO: ");
+            var nomeProduto = Console.ReadLine();
+            Console.WriteLine("QUANTIDADE:  ");
+            var quantidadeProduto = int.Parse(Console.ReadLine());
+            Console.WriteLine("PREÇO: ");
+            var precoProduto = decimal.Parse(Console.ReadLine());
+
+            var produto = new Produto
+            {
+                Nome = nomeProduto,
+                Quantidade = quantidadeProduto,
+                Preco = precoProduto
+            };
+            produtos.Add(produto);
+
             break;
 
         case "2":
