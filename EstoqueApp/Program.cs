@@ -1,7 +1,9 @@
 ﻿using EstoqueApp;
 using EstoqueApp.Services;
 
-var service = new ProdutoService();
+var arquivoService = new ArquivoService();
+var produtos = arquivoService.Carregar();
+var service = new ProdutoService(produtos);
 
 while (true)
 {
@@ -36,6 +38,7 @@ while (true)
                 Preco = precoProduto
             };
             service.Adicionar(produto);
+            arquivoService.Salvar(service.Listar());
             Console.Clear();
             break;
 
@@ -68,7 +71,9 @@ while (true)
                     }
 
                 produtoEncontrado.Quantidade -= quantidadeBaixa;
-                } 
+                arquivoService.Salvar(service.Listar());
+                }
+                
                 else
                 {
                     Console.Write("Produto não encontrado.");

@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using EstoqueApp;
+﻿namespace EstoqueApp.Services;
 
-namespace EstoqueApp.Services;
+using EstoqueApp;
+using System.Collections.Generic;
 
 public class ProdutoService
 {
-    private List<Produto> produtos = new List<Produto>();
+    private List<Produto> produtos;
+
+    public ProdutoService(List<Produto> produtos)
+    {
+        this.produtos = produtos;
+    }
 
     public void Adicionar(Produto produto)
     {
