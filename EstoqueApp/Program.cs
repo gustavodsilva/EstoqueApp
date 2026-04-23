@@ -1,6 +1,7 @@
 ﻿using EstoqueApp;
+using EstoqueApp.Services;
 
-List<Produto> produtos = new List<Produto>();
+var service = new ProdutoService();
 
 while (true)
 {
@@ -11,17 +12,21 @@ while (true)
     Console.WriteLine("0 - Sair");
 
     Console.Write("\nDigite a opção desejada: ");
-    int opcao = int.Parse(Console.ReadLine());
+    if (!int.TryParse(Console.ReadLine(), out int opcao))
+    {
+        Console.Write("Opção inválida!");
+        continue;
+    }
 
     switch (opcao)
     {
         case 1:
             Console.Clear();
-            Console.WriteLine("NOME DO PRODUTO: ");
+            Console.Write("NOME DO PRODUTO: ");
             var nomeProduto = Console.ReadLine();
-            Console.WriteLine("\nQUANTIDADE:  ");
+            Console.Write("\nQUANTIDADE:  ");
             int quantidadeProduto = int.Parse(Console.ReadLine());
-            Console.WriteLine("\nPREÇO: ");
+            Console.Write("\nPREÇO: ");
             decimal precoProduto = decimal.Parse(Console.ReadLine());
 
             var produto = new Produto
@@ -30,37 +35,46 @@ while (true)
                 Quantidade = quantidadeProduto,
                 Preco = precoProduto
             };
-            produtos.Add(produto);
+            service.Adicionar(produto);
             Console.Clear();
             break;
 
         case 2:
             Console.Clear();
-            foreach (var p in produtos)
+            foreach (var p in service.Listar())
             {
-                Console.WriteLine($"\nNome: {p.Nome}, Quantidade: {p.Quantidade}, Preço: {p.Preco}");
+                Console.Write($"\nNome: {p.Nome}, Quantidade: {p.Quantidade}, Preço: {p.Preco}");
             }
             Thread.Sleep(3000);
             Console.Clear();
             break;
 
         case 3:
-            Console.WriteLine("Qual produto deseja dar baixa? ");
+            Console.Write("\nQual produto deseja dar baixa: ");
             var produtoBaixa = Console.ReadLine();
-            foreach (var p in produtos)
-            {
-                if (p.Nome == produtoBaixa)
+            var produtoEncontrado = service.BuscarPorNome(produtoBaixa);
+
+                if (produtoEncontrado != null)
                 {
-                    Console.WriteLine("Quantidade a dar baixa: ");
+                    Console.Write("Quantidade a dar baixa: ");
                     int quantidadeBaixa = int.Parse(Console.ReadLine());
-                    p.Quantidade -= quantidadeBaixa;
+                    if (quantidadeBaixa > produtoEncontrado.Quantidade)
+                    {
+
+                        Console.Write("\nQuantidade insuficiente em estoque.\n");
+                        Thread.Sleep(2000);
+                        Console.Clear();
+                    break;
+                    }
+
+                produtoEncontrado.Quantidade -= quantidadeBaixa;
                 } 
                 else
                 {
-                    Console.WriteLine("Produto não encontrado.");
+                    Console.Write("Produto não encontrado.");
                 }
-            }
-            Console.WriteLine("Pedido sendo processado...");
+    
+            Console.Write("\nProcessando Informação...");
             Thread.Sleep(2000);
             Console.Clear();
             break;
